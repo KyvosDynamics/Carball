@@ -4,22 +4,35 @@ using UnityEngine;
 
 public class BallPushing : MonoBehaviour {
 
-    float pushpower = 2;
+    float pushpower = 20f;
 
 
-    private void OnControllerColliderHit(ControllerColliderHit hit)
+
+    private void OnCollisionEnter(Collision collision)
     {
-        if (hit.gameObject.tag != "Ball")
-            return;
+        
+
+
+    //}
+//
+  //  private void OnfControllerColliderHit(ControllerColliderHit hit)
+   // {
+        if (collision.gameObject.tag != "Ball")
+          return;
 
 
 
-        var body = hit.collider.attachedRigidbody;
+        var body = collision.collider.attachedRigidbody;
+
+        Vector3 collisionForce = collision.impulse / Time.fixedDeltaTime; //because in physics  impulse = force * time
+        var forceWithoutY = new Vector3(collisionForce.x, 0, collisionForce.z);// hit.moveDirection.x, 0, hit.moveDirection.z);
 
 
-        var vector = new Vector3(hit.moveDirection.x, 0, hit.moveDirection.z);
+//        body.velocity = vector * pushpower;
 
-
-        body.velocity = vector * pushpower;
+        body.AddForce(forceWithoutY*pushpower, ForceMode.Force);
     }
+
+
+
 }
